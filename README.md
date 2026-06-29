@@ -64,7 +64,7 @@ Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ... Chrome/128.0.0.0 - 282 reque
 
 | Tool | Needed by |
 |---|---|
-| `bash` ≥ 3.2 | Both scripts |
+| `bash` ≥ 3.2
 | `awk` (gawk / mawk / nawk) | `analyze_logs.sh` |
 
 ---
