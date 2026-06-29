@@ -20,7 +20,7 @@ Project page: <https://roadmap.sh/projects/nginx-log-analyser>
 # Make executable (first time only)
 chmod +x analyze_logs.sh
 
-# Run either script with the path to your log file
+# Run the script with the path to your log file
 ./analyze_logs.sh nginx-access.log
 ```
 
