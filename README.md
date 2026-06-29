@@ -22,7 +22,6 @@ chmod +x analyze_logs.sh
 
 # Run either script with the path to your log file
 ./analyze_logs.sh nginx-access.log
-./analyze_logs_alt.sh nginx-access.log
 ```
 
 ---
@@ -61,6 +60,15 @@ Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ... Chrome/128.0.0.0 - 282 reque
 
 ---
 
+## Requirements
+
+| Tool | Needed by |
+|---|---|
+| `bash` ≥ 3.2 | Both scripts |
+| `awk` (gawk / mawk / nawk) | `analyze_logs.sh` |
+
+---
+
 ## How it works
 
 ### Log format
@@ -82,7 +90,7 @@ Field positions (1-indexed, space-delimited):
 
 ---
 
-### Solution 1 — `awk` pipeline (`analyze_logs.sh`)
+### Solution
 
 ```
 awk '{print $FIELD}' log | sort | uniq -c | sort -rn | head -5 | awk '{format}'
@@ -94,33 +102,3 @@ awk '{print $FIELD}' log | sort | uniq -c | sort -rn | head -5 | awk '{format}'
 - `sort -rn` re-sorts numerically in descending order.
 - `head -5` keeps only the top 5.
 - A final `awk` reformats `count value` → `value - count requests`.
-
-User agents need `-F'"'` to split on `"` so the sixth double-quote-delimited field (`$6`) captures the full agent string.
-
----
-
-### Solution 2 — `grep`/`sed` pipeline (`analyze_logs_alt.sh`)
-
-Uses PCRE look-arounds (`grep -oP`) to pull each field without relying on fixed column positions — more robust when fields contain spaces.
-
-| Field | Pattern |
-|---|---|
-| IP | `^\S+` — longest non-space run at line start |
-| Path | `"\w+ \K[^ ]+(?= HTTP)` — token after the method, before ` HTTP` |
-| Status | `" \K[0-9]{3}(?= )` — 3-digit code after the closing `"` |
-| User agent | `"[^"]*"$` — last quoted string on the line |
-
-`sed` then strips surrounding quotes and reformats `count value` → `value - count requests`.
-
----
-
-## Requirements
-
-| Tool | Needed by |
-|---|---|
-| `bash` ≥ 3.2 | Both scripts |
-| `awk` (gawk / mawk / nawk) | `analyze_logs.sh` |
-| `grep` with `-P` (PCRE) | `analyze_logs_alt.sh` |
-| `sort`, `uniq`, `head`, `sed` | Both scripts |
-
-> **macOS note:** the system `grep` does not support `-P`. Install GNU grep via Homebrew (`brew install grep`) and invoke it as `ggrep`, or use `analyze_logs.sh` instead.
