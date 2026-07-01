@@ -2,8 +2,6 @@
 
 A command-line tool that parses Nginx access logs and surfaces the top-5 ranked entries across four key dimensions: IP addresses, request paths, response status codes, and user agents.
 
-Project page: <https://roadmap.sh/projects/nginx-log-analyser>
-
 ---
 
 ## Files
